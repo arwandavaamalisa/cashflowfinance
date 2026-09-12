@@ -1,0 +1,3071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office Finance Manager</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: #f5f7fb;
+    color: #202633;
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 245px;
+    background: #111827;
+    color: white;
+    padding: 25px 15px;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 12px 30px;
+}
+
+.logo span {
+    color: #60a5fa;
+}
+
+.nav-section {
+    margin-top: 20px;
+    margin-bottom: 8px;
+    padding: 0 12px;
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.nav-item {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 3px;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: #1f2937;
+    color: white;
+}
+
+.nav-item span {
+    margin-right: 10px;
+}
+
+/* MAIN */
+
+.main {
+    margin-left: 245px;
+    width: calc(100% - 245px);
+}
+
+.topbar {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.topbar-title {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.company {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.content {
+    padding: 30px;
+}
+
+/* PAGE */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-title {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.page-subtitle {
+    color: #6b7280;
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+/* BUTTONS */
+
+button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn {
+    padding: 10px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.btn-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* CARDS */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.card-label {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.card-value {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.card-small {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.income {
+    color: #059669;
+}
+
+.expense {
+    color: #dc2626;
+}
+
+.profit {
+    color: #2563eb;
+}
+
+/* GRID */
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.panel-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+/* TABLE */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #f9fafb;
+    text-align: left;
+    padding: 12px;
+    font-size: 12px;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+    padding: 13px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+/* STATUS */
+
+.status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-paid,
+.status-completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* FORMS */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #2563eb;
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* FILTER */
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+    width: auto;
+    min-width: 150px;
+}
+
+/* REPORT */
+
+.report-header {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.report-header h2 {
+    font-size: 20px;
+}
+
+.report-header p {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.report-total {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* CHART */
+
+.chart {
+    height: 250px;
+    display: flex;
+    align-items: end;
+    gap: 10px;
+    padding: 20px 5px 0;
+}
+
+.bar-wrapper {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    gap: 4px;
+    justify-content: center;
+}
+
+.bar {
+    width: 35%;
+    border-radius: 5px 5px 0 0;
+    min-height: 2px;
+}
+
+.bar.income-bar {
+    background: #10b981;
+}
+
+.bar.expense-bar {
+    background: #ef4444;
+}
+
+.month-label {
+    font-size: 10px;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    width: 600px;
+    max-width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.close {
+    font-size: 24px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 1000px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 700px) {
+    .sidebar {
+        width: 65px;
+    }
+
+    .logo {
+        font-size: 0;
+    }
+
+    .logo span {
+        font-size: 18px;
+    }
+
+    .nav-item {
+        text-align: center;
+        font-size: 0;
+    }
+
+    .nav-item span {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .main {
+        margin-left: 65px;
+        width: calc(100% - 65px);
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+        grid-column: auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        Office<span>Finance</span>
+    </div>
+
+    <div class="nav-section">Overview</div>
+
+    <div class="nav-item active" onclick="showPage('dashboard', this)">
+        <span>📊</span> Dashboard
+    </div>
+
+    <div class="nav-section">Finance</div>
+
+    <div class="nav-item" onclick="showPage('income', this)">
+        <span>💰</span> Income
+    </div>
+
+    <div class="nav-item" onclick="showPage('expenses', this)">
+        <span>💸</span> Expenses
+    </div>
+
+    <div class="nav-item" onclick="showPage('pettycash', this)">
+        <span>💵</span> Petty Cash
+    </div>
+
+    <div class="nav-section">Operations</div>
+
+    <div class="nav-item" onclick="showPage('projects', this)">
+        <span>📁</span> Projects
+    </div>
+
+    <div class="nav-item" onclick="showPage('inventory', this)">
+        <span>📦</span> Inventory
+    </div>
+
+    <div class="nav-item" onclick="showPage('maintenance', this)">
+        <span>🔧</span> Maintenance
+    </div>
+
+    <div class="nav-section">Reports</div>
+
+    <div class="nav-item" onclick="showPage('reports', this)">
+        <span>📑</span> Reports
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <header class="topbar">
+        <div class="topbar-title" id="topbarTitle">
+            Dashboard
+        </div>
+
+        <div class="company">
+            Office Finance Manager
+        </div>
+    </header>
+
+
+    <div class="content">
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="page active">
+
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Dashboard</div>
+                    <div class="page-subtitle">
+                        Overview of your company's financial activity
+                    </div>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="openTransactionModal('income')">
+                    + Add Transaction
+                </button>
+            </div>
+
+
+            <div class="cards">
+
+                <div class="card">
+                    <div class="card-label">Total Income</div>
+                    <div class="card-value income" id="dashboardIncome">
+                        AED 0
+                    </div>
+                    <div class="card-small">
+                        Total money received
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Total Expenses</div>
+                    <div class="card-value expense" id="dashboardExpense">
+                        AED 0
+                    </div>
+                    <div class="card-small">
+                        Total money spent
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Net Profit</div>
+                    <div class="card-value profit" id="dashboardProfit">
+                        AED 0
+                    </div>
+                    <div class="card-small">
+                        Income minus expenses
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Cash Balance</div>
+                    <div class="card-value" id="dashboardCash">
+                        AED 0
+                    </div>
+                    <div class="card-small">
+                        Current cash position
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="grid-2">
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        Cash Flow
+                    </div>
+
+                    <div class="chart" id="cashChart"></div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        Recent Transactions
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recentTransactions"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INCOME -->
+
+        <section id="income" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <div class="page-title">Income</div>
+                    <div class="page-subtitle">
+                        Money coming into the company
+                    </div>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="openTransactionModal('income')">
+                    + Add Income
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="filters">
+
+                    <input type="text"
+                        id="incomeSearch"
+                        placeholder="Search..."
+                        oninput="renderIncome()">
+
+                    <select id="incomeStatus"
+                        onchange="renderIncome()">
+
+                        <option value="">All Status</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cancelled">Cancelled</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Date</th>
+                                <th>Reference</th>
+                                <th>Category</th>
+                                <th>Client / Source</th>
+                                <th>Project</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="incomeTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- EXPENSES -->
+
+        <section id="expenses" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <div class="page-title">Expenses</div>
+                    <div class="page-subtitle">
+                        Company spending and operating costs
+                    </div>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="openTransactionModal('expense')">
+                    + Add Expense
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="filters">
+
+                    <input type="text"
+                        id="expenseSearch"
+                        placeholder="Search..."
+                        oninput="renderExpenses()">
+
+                    <select id="expenseStatus"
+                        onchange="renderExpenses()">
+
+                        <option value="">All Status</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cancelled">Cancelled</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Date</th>
+                                <th>Reference</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Project</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="expenseTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PETTY CASH -->
+
+        <section id="pettycash" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <div class="page-title">Petty Cash</div>
+                    <div class="page-subtitle">
+                        Small daily cash transactions
+                    </div>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="openPettyCashModal()">
+                    + Add Petty Cash
+                </button>
+
+            </div>
+
+
+            <div class="cards">
+
+                <div class="card">
+                    <div class="card-label">
+                        Opening Balance
+                    </div>
+
+                    <div class="card-value">
+                        AED 5,000
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">
+                        Cash In
+                    </div>
+
+                    <div class="card-value income"
+                        id="pettyIn">
+                        AED 0
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">
+                        Cash Out
+                    </div>
+
+                    <div class="card-value expense"
+                        id="pettyOut">
+                        AED 0
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">
+                        Current Balance
+                    </div>
+
+                    <div class="card-value"
+                        id="pettyBalance">
+                        AED 5,000
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Person</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="pettyTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROJECTS -->
+
+        <section id="projects" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <div class="page-title">Projects</div>
+                    <div class="page-subtitle">
+                        Project revenue and profitability
+                    </div>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="openProjectModal()">
+                    + Add Project
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Project</th>
+                                <th>Client</th>
+                                <th>Revenue</th>
+                                <th>Expenses</th>
+                                <th>Profit</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="projectTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INVENTORY -->
+
+        <section id="inventory" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <div class="page-title">Inventory</div>
+                    <div class="page-subtitle">
+                        Track stock and inventory value
+                    </div>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="openInventoryModal()">
+                    + Add Item
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Item</th>
+                                <th>SKU</th>
+                                <th>Stock</th>
+                                <th>Unit Cost</th>
+                                <th>Total Value</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="inventoryTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MAINTENANCE -->
+
+        <section id="maintenance" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <div class="page-title">Maintenance</div>
+                    <div class="page-subtitle">
+                        Maintenance schedules and costs
+                    </div>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="openMaintenanceModal()">
+                    + Add Maintenance
+                </button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Date</th>
+                                <th>Asset</th>
+                                <th>Issue</th>
+                                <th>Cost</th>
+                                <th>Next Maintenance</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="maintenanceTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- REPORTS -->
+
+        <section id="reports" class="page">
+
+            <div class="page-header">
+
+                <div>
+                    <div class="page-title">Financial Reports</div>
+                    <div class="page-subtitle">
+                        Accounting reports for your company
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:8px;">
+
+                    <button class="btn btn-secondary"
+                        onclick="exportCSV()">
+                        Export Excel
+                    </button>
+
+                    <button class="btn btn-primary"
+                        onclick="window.print()">
+                        Export PDF
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel" id="reportArea">
+
+                <div class="report-header">
+
+                    <h2>OFFICE FINANCE MANAGER</h2>
+
+                    <p>
+                        Financial Statement
+                    </p>
+
+                    <p id="reportDate"></p>
+
+                </div>
+
+
+                <h3 style="margin-bottom:15px;">
+                    Profit & Loss Statement
+                </h3>
+
+
+                <table>
+
+                    <tbody>
+
+                        <tr>
+                            <td><strong>Total Revenue</strong></td>
+
+                            <td style="text-align:right;"
+                                class="income"
+                                id="reportIncome">
+                                AED 0
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Total Expenses</strong></td>
+
+                            <td style="text-align:right;"
+                                class="expense"
+                                id="reportExpense">
+                                AED 0
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Net Profit</strong></td>
+
+                            <td style="text-align:right;"
+                                class="profit"
+                                id="reportProfit">
+                                AED 0
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+
+                <div class="report-total">
+                    Closing Cash:
+                    <span id="reportCash">
+                        AED 0
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+</div>
+
+
+<!-- TRANSACTION MODAL -->
+
+<div class="modal" id="transactionModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="transactionTitle">
+                Add Income
+            </h2>
+
+            <div class="close"
+                onclick="closeModal('transactionModal')">
+                ×
+            </div>
+
+        </div>
+
+
+        <form onsubmit="saveTransaction(event)">
+
+            <input type="hidden"
+                id="transactionType">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Date</label>
+
+                    <input type="date"
+                        id="transactionDate"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Reference</label>
+
+                    <input type="text"
+                        id="transactionReference"
+                        placeholder="INV-001 / EXP-001">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Category</label>
+
+                    <select id="transactionCategory"
+                        required>
+
+                        <option value="">
+                            Select category
+                        </option>
+
+                        <option>Project Payment</option>
+                        <option>Sales</option>
+                        <option>Service</option>
+                        <option>Office</option>
+                        <option>Salary</option>
+                        <option>Material</option>
+                        <option>Transport</option>
+                        <option>Utilities</option>
+                        <option>Marketing</option>
+                        <option>Visa</option>
+                        <option>Equipment</option>
+                        <option>Maintenance</option>
+                        <option>Other</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Amount</label>
+
+                    <input type="number"
+                        id="transactionAmount"
+                        min="0"
+                        step="0.01"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Client / Description</label>
+
+                    <input type="text"
+                        id="transactionDescription"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Project</label>
+
+                    <select id="transactionProject">
+
+                        <option value="">
+                            General / No Project
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Payment Method</label>
+
+                    <select id="transactionMethod">
+
+                        <option>Bank Transfer</option>
+                        <option>Cash</option>
+                        <option>Card</option>
+                        <option>Cheque</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Status</label>
+
+                    <select id="transactionStatus">
+
+                        <option>Paid</option>
+                        <option>Pending</option>
+                        <option>Cancelled</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button type="submit"
+                    class="btn btn-primary">
+                    Save Transaction
+                </button>
+
+                <button type="button"
+                    class="btn btn-secondary"
+                    onclick="closeModal('transactionModal')">
+                    Cancel
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- PROJECT MODAL -->
+
+<div class="modal" id="projectModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Add Project</h2>
+
+            <div class="close"
+                onclick="closeModal('projectModal')">
+                ×
+            </div>
+
+        </div>
+
+
+        <form onsubmit="saveProject(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Project Name</label>
+
+                    <input id="projectName"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Client</label>
+
+                    <input id="projectClient">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Contract Value</label>
+
+                    <input type="number"
+                        id="projectValue"
+                        step="0.01">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Status</label>
+
+                    <select id="projectStatus">
+
+                        <option>Active</option>
+                        <option>Completed</option>
+                        <option>Pending</option>
+                        <option>Cancelled</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button class="btn btn-primary">
+                    Save Project
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- PETTY MODAL -->
+
+<div class="modal" id="pettyModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Add Petty Cash</h2>
+
+            <div class="close"
+                onclick="closeModal('pettyModal')">
+                ×
+            </div>
+
+        </div>
+
+
+        <form onsubmit="savePetty(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Date</label>
+
+                    <input type="date"
+                        id="pettyDate"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Type</label>
+
+                    <select id="pettyType">
+
+                        <option>Cash Out</option>
+                        <option>Cash In</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Description</label>
+
+                    <input id="pettyDescription"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Category</label>
+
+                    <input id="pettyCategory"
+                        placeholder="Transport / Food / etc.">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Amount</label>
+
+                    <input type="number"
+                        id="pettyAmount"
+                        step="0.01"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Person</label>
+
+                    <input id="pettyPerson">
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button class="btn btn-primary">
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- INVENTORY MODAL -->
+
+<div class="modal" id="inventoryModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Add Inventory</h2>
+
+            <div class="close"
+                onclick="closeModal('inventoryModal')">
+                ×
+            </div>
+
+        </div>
+
+
+        <form onsubmit="saveInventory(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Item</label>
+
+                    <input id="inventoryName"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>SKU</label>
+
+                    <input id="inventorySKU">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Stock</label>
+
+                    <input type="number"
+                        id="inventoryStock"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Unit Cost</label>
+
+                    <input type="number"
+                        id="inventoryCost"
+                        step="0.01"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button class="btn btn-primary">
+                    Save Item
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- MAINTENANCE MODAL -->
+
+<div class="modal" id="maintenanceModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Add Maintenance</h2>
+
+            <div class="close"
+                onclick="closeModal('maintenanceModal')">
+                ×
+            </div>
+
+        </div>
+
+
+        <form onsubmit="saveMaintenance(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Date</label>
+
+                    <input type="date"
+                        id="maintenanceDate"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Asset</label>
+
+                    <input id="maintenanceAsset"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Issue</label>
+
+                    <input id="maintenanceIssue"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Cost</label>
+
+                    <input type="number"
+                        id="maintenanceCost"
+                        step="0.01">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Next Maintenance</label>
+
+                    <input type="date"
+                        id="maintenanceNext">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Status</label>
+
+                    <select id="maintenanceStatus">
+
+                        <option>Completed</option>
+                        <option>Pending</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button class="btn btn-primary">
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   DATABASE
+========================= */
+
+let transactions =
+    JSON.parse(localStorage.getItem("transactions")) || [];
+
+let projects =
+    JSON.parse(localStorage.getItem("projects")) || [];
+
+let pettyCash =
+    JSON.parse(localStorage.getItem("pettyCash")) || [];
+
+let inventory =
+    JSON.parse(localStorage.getItem("inventory")) || [];
+
+let maintenance =
+    JSON.parse(localStorage.getItem("maintenance")) || [];
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function saveDatabase() {
+
+    localStorage.setItem(
+        "transactions",
+        JSON.stringify(transactions)
+    );
+
+    localStorage.setItem(
+        "projects",
+        JSON.stringify(projects)
+    );
+
+    localStorage.setItem(
+        "pettyCash",
+        JSON.stringify(pettyCash)
+    );
+
+    localStorage.setItem(
+        "inventory",
+        JSON.stringify(inventory)
+    );
+
+    localStorage.setItem(
+        "maintenance",
+        JSON.stringify(maintenance)
+    );
+
+}
+
+
+function money(value) {
+
+    return new Intl.NumberFormat(
+        "en-US",
+        {
+            style: "currency",
+            currency: "AED",
+            maximumFractionDigits: 2
+        }
+    ).format(value);
+
+}
+
+
+function escapeHTML(str) {
+
+    return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showPage(page, element) {
+
+    document.querySelectorAll(".page")
+        .forEach(p => p.classList.remove("active"));
+
+    document.getElementById(page)
+        .classList.add("active");
+
+    document.querySelectorAll(".nav-item")
+        .forEach(n => n.classList.remove("active"));
+
+    if(element) element.classList.add("active");
+
+    const titles = {
+
+        dashboard: "Dashboard",
+        income: "Income",
+        expenses: "Expenses",
+        pettycash: "Petty Cash",
+        projects: "Projects",
+        inventory: "Inventory",
+        maintenance: "Maintenance",
+        reports: "Reports"
+
+    };
+
+    document.getElementById("topbarTitle")
+        .textContent = titles[page];
+
+    renderAll();
+
+}
+
+
+/* =========================
+   TRANSACTIONS
+========================= */
+
+function openTransactionModal(type) {
+
+    document.getElementById("transactionType")
+        .value = type;
+
+    document.getElementById("transactionTitle")
+        .textContent =
+        type === "income"
+        ? "Add Income"
+        : "Add Expense";
+
+    document.getElementById("transactionDate")
+        .value =
+        new Date().toISOString().split("T")[0];
+
+    populateProjectSelect();
+
+    document.getElementById("transactionModal")
+        .classList.add("show");
+
+}
+
+
+function saveTransaction(event) {
+
+    event.preventDefault();
+
+    const type =
+        document.getElementById("transactionType").value;
+
+    const transaction = {
+
+        id: Date.now(),
+
+        type,
+
+        date:
+            document.getElementById("transactionDate").value,
+
+        reference:
+            document.getElementById("transactionReference").value,
+
+        category:
+            document.getElementById("transactionCategory").value,
+
+        description:
+            document.getElementById("transactionDescription").value,
+
+        project:
+            document.getElementById("transactionProject").value,
+
+        amount:
+            Number(document.getElementById("transactionAmount").value),
+
+        method:
+            document.getElementById("transactionMethod").value,
+
+        status:
+            document.getElementById("transactionStatus").value
+
+    };
+
+
+    transactions.push(transaction);
+
+    saveDatabase();
+
+    closeModal("transactionModal");
+
+    event.target.reset();
+
+    renderAll();
+
+}
+
+
+function deleteTransaction(id) {
+
+    if(!confirm("Delete this transaction?"))
+        return;
+
+    transactions =
+        transactions.filter(t => t.id !== id);
+
+    saveDatabase();
+
+    renderAll();
+
+}
+
+
+/* =========================
+   INCOME
+========================= */
+
+function renderIncome() {
+
+    const search =
+        document.getElementById("incomeSearch")
+        ?.value.toLowerCase() || "";
+
+    const status =
+        document.getElementById("incomeStatus")
+        ?.value || "";
+
+    const data =
+        transactions.filter(t => {
+
+            return t.type === "income" &&
+            (!status || t.status === status) &&
+            (
+                t.description.toLowerCase().includes(search) ||
+                t.reference.toLowerCase().includes(search) ||
+                t.category.toLowerCase().includes(search)
+            );
+
+        });
+
+
+    const tbody =
+        document.getElementById("incomeTable");
+
+    tbody.innerHTML = "";
+
+
+    data.slice().reverse().forEach(t => {
+
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td>${t.date}</td>
+
+            <td>${escapeHTML(t.reference)}</td>
+
+            <td>${escapeHTML(t.category)}</td>
+
+            <td>${escapeHTML(t.description)}</td>
+
+            <td>${escapeHTML(t.project || "-")}</td>
+
+            <td class="income">
+                ${money(t.amount)}
+            </td>
+
+            <td>${escapeHTML(t.method)}</td>
+
+            <td>
+                <span class="status status-${t.status.toLowerCase()}">
+                    ${t.status}
+                </span>
+            </td>
+
+            <td>
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteTransaction(${t.id})">
+                    Delete
+                </button>
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   EXPENSES
+========================= */
+
+function renderExpenses() {
+
+    const search =
+        document.getElementById("expenseSearch")
+        ?.value.toLowerCase() || "";
+
+    const status =
+        document.getElementById("expenseStatus")
+        ?.value || "";
+
+    const data =
+        transactions.filter(t => {
+
+            return t.type === "expense" &&
+            (!status || t.status === status) &&
+            (
+                t.description.toLowerCase().includes(search) ||
+                t.reference.toLowerCase().includes(search) ||
+                t.category.toLowerCase().includes(search)
+            );
+
+        });
+
+
+    const tbody =
+        document.getElementById("expenseTable");
+
+    tbody.innerHTML = "";
+
+
+    data.slice().reverse().forEach(t => {
+
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td>${t.date}</td>
+
+            <td>${escapeHTML(t.reference)}</td>
+
+            <td>${escapeHTML(t.category)}</td>
+
+            <td>${escapeHTML(t.description)}</td>
+
+            <td>${escapeHTML(t.project || "-")}</td>
+
+            <td class="expense">
+                ${money(t.amount)}
+            </td>
+
+            <td>${escapeHTML(t.method)}</td>
+
+            <td>
+                <span class="status status-${t.status.toLowerCase()}">
+                    ${t.status}
+                </span>
+            </td>
+
+            <td>
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteTransaction(${t.id})">
+                    Delete
+                </button>
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   PROJECTS
+========================= */
+
+function openProjectModal() {
+
+    document.getElementById("projectModal")
+        .classList.add("show");
+
+}
+
+
+function saveProject(event) {
+
+    event.preventDefault();
+
+    projects.push({
+
+        id: Date.now(),
+
+        name:
+            document.getElementById("projectName").value,
+
+        client:
+            document.getElementById("projectClient").value,
+
+        value:
+            Number(document.getElementById("projectValue").value || 0),
+
+        status:
+            document.getElementById("projectStatus").value
+
+    });
+
+
+    saveDatabase();
+
+    closeModal("projectModal");
+
+    event.target.reset();
+
+    renderAll();
+
+}
+
+
+function deleteProject(id) {
+
+    if(!confirm("Delete project?"))
+        return;
+
+    projects =
+        projects.filter(p => p.id !== id);
+
+    saveDatabase();
+
+    renderAll();
+
+}
+
+
+function renderProjects() {
+
+    const tbody =
+        document.getElementById("projectTable");
+
+    tbody.innerHTML = "";
+
+
+    projects.forEach(p => {
+
+        const projectTransactions =
+            transactions.filter(
+                t => t.project === p.name
+            );
+
+
+        const revenue =
+            projectTransactions
+            .filter(t => t.type === "income")
+            .reduce((sum,t) => sum + t.amount, 0);
+
+
+        const expenses =
+            projectTransactions
+            .filter(t => t.type === "expense")
+            .reduce((sum,t) => sum + t.amount, 0);
+
+
+        const profit =
+            revenue - expenses;
+
+
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td>
+                <strong>${escapeHTML(p.name)}</strong>
+            </td>
+
+            <td>${escapeHTML(p.client)}</td>
+
+            <td class="income">
+                ${money(revenue)}
+            </td>
+
+            <td class="expense">
+                ${money(expenses)}
+            </td>
+
+            <td class="profit">
+                ${money(profit)}
+            </td>
+
+            <td>
+                <span class="status status-${p.status.toLowerCase()}">
+                    ${p.status}
+                </span>
+            </td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteProject(${p.id})">
+                    Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+
+function populateProjectSelect() {
+
+    const select =
+        document.getElementById("transactionProject");
+
+    select.innerHTML =
+        `<option value="">General / No Project</option>`;
+
+    projects.forEach(p => {
+
+        select.innerHTML +=
+            `<option value="${escapeHTML(p.name)}">
+                ${escapeHTML(p.name)}
+            </option>`;
+
+    });
+
+}
+
+
+/* =========================
+   PETTY CASH
+========================= */
+
+function openPettyCashModal() {
+
+    document.getElementById("pettyDate")
+        .value =
+        new Date().toISOString().split("T")[0];
+
+    document.getElementById("pettyModal")
+        .classList.add("show");
+
+}
+
+
+function savePetty(event) {
+
+    event.preventDefault();
+
+    pettyCash.push({
+
+        id: Date.now(),
+
+        date:
+            document.getElementById("pettyDate").value,
+
+        type:
+            document.getElementById("pettyType").value,
+
+        description:
+            document.getElementById("pettyDescription").value,
+
+        category:
+            document.getElementById("pettyCategory").value,
+
+        amount:
+            Number(document.getElementById("pettyAmount").value),
+
+        person:
+            document.getElementById("pettyPerson").value
+
+    });
+
+
+    saveDatabase();
+
+    closeModal("pettyModal");
+
+    event.target.reset();
+
+    renderAll();
+
+}
+
+
+function deletePetty(id) {
+
+    if(!confirm("Delete petty cash transaction?"))
+        return;
+
+    pettyCash =
+        pettyCash.filter(x => x.id !== id);
+
+    saveDatabase();
+
+    renderAll();
+
+}
+
+
+function renderPettyCash() {
+
+    let cashIn = 0;
+    let cashOut = 0;
+
+
+    const tbody =
+        document.getElementById("pettyTable");
+
+    tbody.innerHTML = "";
+
+
+    pettyCash.slice().reverse().forEach(p => {
+
+        if(p.type === "Cash In")
+            cashIn += p.amount;
+
+        else
+            cashOut += p.amount;
+
+
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td>${p.date}</td>
+
+            <td>${escapeHTML(p.description)}</td>
+
+            <td>${escapeHTML(p.category)}</td>
+
+            <td>${p.type}</td>
+
+            <td>${money(p.amount)}</td>
+
+            <td>${escapeHTML(p.person)}</td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deletePetty(${p.id})">
+                    Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+
+    const opening = 5000;
+
+    document.getElementById("pettyIn")
+        .textContent = money(cashIn);
+
+    document.getElementById("pettyOut")
+        .textContent = money(cashOut);
+
+    document.getElementById("pettyBalance")
+        .textContent =
+        money(opening + cashIn - cashOut);
+
+}
+
+
+/* =========================
+   INVENTORY
+========================= */
+
+function openInventoryModal() {
+
+    document.getElementById("inventoryModal")
+        .classList.add("show");
+
+}
+
+
+function saveInventory(event) {
+
+    event.preventDefault();
+
+    inventory.push({
+
+        id: Date.now(),
+
+        name:
+            document.getElementById("inventoryName").value,
+
+        sku:
+            document.getElementById("inventorySKU").value,
+
+        stock:
+            Number(document.getElementById("inventoryStock").value),
+
+        cost:
+            Number(document.getElementById("inventoryCost").value)
+
+    });
+
+
+    saveDatabase();
+
+    closeModal("inventoryModal");
+
+    event.target.reset();
+
+    renderAll();
+
+}
+
+
+function deleteInventory(id) {
+
+    if(!confirm("Delete inventory item?"))
+        return;
+
+    inventory =
+        inventory.filter(x => x.id !== id);
+
+    saveDatabase();
+
+    renderAll();
+
+}
+
+
+function renderInventory() {
+
+    const tbody =
+        document.getElementById("inventoryTable");
+
+    tbody.innerHTML = "";
+
+
+    inventory.forEach(item => {
+
+        const value =
+            item.stock * item.cost;
+
+        const status =
+            item.stock <= 5
+            ? "Low Stock"
+            : "In Stock";
+
+
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td>${escapeHTML(item.name)}</td>
+
+            <td>${escapeHTML(item.sku)}</td>
+
+            <td>${item.stock}</td>
+
+            <td>${money(item.cost)}</td>
+
+            <td>${money(value)}</td>
+
+            <td>
+
+                <span class="status ${
+                    item.stock <= 5
+                    ? "status-pending"
+                    : "status-completed"
+                }">
+
+                    ${status}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteInventory(${item.id})">
+                    Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   MAINTENANCE
+========================= */
+
+function openMaintenanceModal() {
+
+    document.getElementById("maintenanceDate")
+        .value =
+        new Date().toISOString().split("T")[0];
+
+    document.getElementById("maintenanceModal")
+        .classList.add("show");
+
+}
+
+
+function saveMaintenance(event) {
+
+    event.preventDefault();
+
+    maintenance.push({
+
+        id: Date.now(),
+
+        date:
+            document.getElementById("maintenanceDate").value,
+
+        asset:
+            document.getElementById("maintenanceAsset").value,
+
+        issue:
+            document.getElementById("maintenanceIssue").value,
+
+        cost:
+            Number(document.getElementById("maintenanceCost").value || 0),
+
+        next:
+            document.getElementById("maintenanceNext").value,
+
+        status:
+            document.getElementById("maintenanceStatus").value
+
+    });
+
+
+    saveDatabase();
+
+    closeModal("maintenanceModal");
+
+    event.target.reset();
+
+    renderAll();
+
+}
+
+
+function deleteMaintenance(id) {
+
+    if(!confirm("Delete maintenance record?"))
+        return;
+
+    maintenance =
+        maintenance.filter(x => x.id !== id);
+
+    saveDatabase();
+
+    renderAll();
+
+}
+
+
+function renderMaintenance() {
+
+    const tbody =
+        document.getElementById("maintenanceTable");
+
+    tbody.innerHTML = "";
+
+
+    maintenance.slice().reverse().forEach(m => {
+
+        tbody.innerHTML += `
+
+        <tr>
+
+            <td>${m.date}</td>
+
+            <td>${escapeHTML(m.asset)}</td>
+
+            <td>${escapeHTML(m.issue)}</td>
+
+            <td>${money(m.cost)}</td>
+
+            <td>${m.next || "-"}</td>
+
+            <td>
+
+                <span class="status status-${m.status.toLowerCase()}">
+
+                    ${m.status}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteMaintenance(${m.id})">
+                    Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function calculateFinance() {
+
+    const income =
+        transactions
+        .filter(t => t.type === "income" && t.status === "Paid")
+        .reduce((sum,t) => sum + t.amount, 0);
+
+
+    const expense =
+        transactions
+        .filter(t => t.type === "expense" && t.status === "Paid")
+        .reduce((sum,t) => sum + t.amount, 0);
+
+
+    const profit =
+        income - expense;
+
+
+    return {
+        income,
+        expense,
+        profit
+    };
+
+}
+
+
+function renderDashboard() {
+
+    const finance =
+        calculateFinance();
+
+
+    document.getElementById("dashboardIncome")
+        .textContent = money(finance.income);
+
+    document.getElementById("dashboardExpense")
+        .textContent = money(finance.expense);
+
+    document.getElementById("dashboardProfit")
+        .textContent = money(finance.profit);
+
+    document.getElementById("dashboardCash")
+        .textContent = money(finance.profit);
+
+
+    renderRecentTransactions();
+
+    renderChart();
+
+}
+
+
+function renderRecentTransactions() {
+
+    const tbody =
+        document.getElementById("recentTransactions");
+
+    tbody.innerHTML = "";
+
+
+    transactions
+        .slice()
+        .sort((a,b) =>
+            new Date(b.date) - new Date(a.date)
+        )
+        .slice(0,8)
+        .forEach(t => {
+
+            tbody.innerHTML += `
+
+            <tr>
+
+                <td>${t.date}</td>
+
+                <td>
+                    ${escapeHTML(t.description)}
+                </td>
+
+                <td>
+                    ${
+                        t.type === "income"
+                        ? "Income"
+                        : "Expense"
+                    }
+                </td>
+
+                <td class="${
+                    t.type === "income"
+                    ? "income"
+                    : "expense"
+                }">
+
+                    ${
+                        t.type === "income"
+                        ? "+"
+                        : "-"
+                    }
+
+                    ${money(t.amount)}
+
+                </td>
+
+            </tr>
+
+            `;
+
+        });
+
+}
+
+
+function renderChart() {
+
+    const chart =
+        document.getElementById("cashChart");
+
+    chart.innerHTML = "";
+
+
+    const months = [];
+
+    for(let i = 5; i >= 0; i--) {
+
+        const d = new Date();
+
+        d.setMonth(d.getMonth() - i);
+
+        months.push({
+
+            key:
+                `${d.getFullYear()}-${String(
+                    d.getMonth()+1
+                ).padStart(2,"0")}`,
+
+            label:
+                d.toLocaleString(
+                    "en-US",
+                    {month:"short"}
+                )
+
+        });
+
+    }
+
+
+    let max = 1;
+
+    const data = months.map(m => {
+
+        const income =
+            transactions
+            .filter(t =>
+                t.type === "income" &&
+                t.status === "Paid" &&
+                t.date.startsWith(m.key)
+            )
+            .reduce((s,t) => s+t.amount,0);
+
+
+        const expense =
+            transactions
+            .filter(t =>
+                t.type === "expense" &&
+                t.status === "Paid" &&
+                t.date.startsWith(m.key)
+            )
+            .reduce((s,t) => s+t.amount,0);
+
+
+        max =
+            Math.max(max,income,expense);
+
+
+        return {
+            ...m,
+            income,
+            expense
+        };
+
+    });
+
+
+    data.forEach(m => {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "bar-wrapper";
+
+        wrapper.innerHTML = `
+
+            <div style="
+                display:flex;
+                align-items:end;
+                height:90%;
+                width:100%;
+                justify-content:center;
+                gap:3px;
+            ">
+
+                <div
+                    class="bar income-bar"
+                    style="
+                        height:${Math.max(
+                            2,
+                            (m.income/max)*100
+                        )}%;
+                    "
+                    title="Income: ${money(m.income)}">
+                </div>
+
+                <div
+                    class="bar expense-bar"
+                    style="
+                        height:${Math.max(
+                            2,
+                            (m.expense/max)*100
+                        )}%;
+                    "
+                    title="Expense: ${money(m.expense)}">
+                </div>
+
+            </div>
+
+            <div class="month-label">
+                ${m.label}
+            </div>
+
+        `;
+
+        chart.appendChild(wrapper);
+
+    });
+
+}
+
+
+/* =========================
+   REPORT
+========================= */
+
+function renderReports() {
+
+    const finance =
+        calculateFinance();
+
+
+    document.getElementById("reportIncome")
+        .textContent =
+        money(finance.income);
+
+    document.getElementById("reportExpense")
+        .textContent =
+        money(finance.expense);
+
+    document.getElementById("reportProfit")
+        .textContent =
+        money(finance.profit);
+
+    document.getElementById("reportCash")
+        .textContent =
+        money(finance.profit);
+
+    document.getElementById("reportDate")
+        .textContent =
+        new Date().toLocaleDateString(
+            "en-GB",
+            {
+                day:"2-digit",
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+}
+
+
+/* =========================
+   EXPORT
+========================= */
+
+function exportCSV() {
+
+    let csv =
+        "Date,Type,Reference,Category,Description,Project,Amount,Payment Method,Status\n";
+
+
+    transactions.forEach(t => {
+
+        csv += [
+
+            t.date,
+            t.type,
+            t.reference,
+            t.category,
+            t.description,
+            t.project,
+            t.amount,
+            t.method,
+            t.status
+
+        ]
+        .map(v =>
+            `"${String(v || "")
+                .replaceAll('"','""')}"`
+        )
+        .join(",") + "\n";
+
+    });
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {type:"text/csv;charset=utf-8;"}
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "financial-report.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
+function closeModal(id) {
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+window.onclick = function(event) {
+
+    document.querySelectorAll(".modal")
+        .forEach(modal => {
+
+            if(event.target === modal)
+                modal.classList.remove("show");
+
+        });
+
+};
+
+
+/* =========================
+   RENDER ALL
+========================= */
+
+function renderAll() {
+
+    renderDashboard();
+
+    renderIncome();
+
+    renderExpenses();
+
+    renderProjects();
+
+    renderPettyCash();
+
+    renderInventory();
+
+    renderMaintenance();
+
+    renderReports();
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+renderAll();
+
+</script>
+
+</body>
+</html>
