@@ -612,7 +612,7 @@ textarea:focus {
                 <div class="card">
                     <div class="card-label">Total Income</div>
                     <div class="card-value income" id="dashboardIncome">
-                        AED 0
+                        Rp0
                     </div>
                     <div class="card-small">
                         Total money received
@@ -622,7 +622,7 @@ textarea:focus {
                 <div class="card">
                     <div class="card-label">Total Expenses</div>
                     <div class="card-value expense" id="dashboardExpense">
-                        AED 0
+                        Rp0
                     </div>
                     <div class="card-small">
                         Total money spent
@@ -632,7 +632,7 @@ textarea:focus {
                 <div class="card">
                     <div class="card-label">Net Profit</div>
                     <div class="card-value profit" id="dashboardProfit">
-                        AED 0
+                        Rp0
                     </div>
                     <div class="card-small">
                         Income minus expenses
@@ -642,7 +642,7 @@ textarea:focus {
                 <div class="card">
                     <div class="card-label">Cash Balance</div>
                     <div class="card-value" id="dashboardCash">
-                        AED 0
+                        Rp0
                     </div>
                     <div class="card-small">
                         Current cash position
@@ -874,7 +874,7 @@ textarea:focus {
                     </div>
 
                     <div class="card-value">
-                        AED 5,000
+                        Rp5.000.000
                     </div>
                 </div>
 
@@ -885,7 +885,7 @@ textarea:focus {
 
                     <div class="card-value income"
                         id="pettyIn">
-                        AED 0
+                        Rp0
                     </div>
                 </div>
 
@@ -896,7 +896,7 @@ textarea:focus {
 
                     <div class="card-value expense"
                         id="pettyOut">
-                        AED 0
+                        Rp0
                     </div>
                 </div>
 
@@ -907,7 +907,7 @@ textarea:focus {
 
                     <div class="card-value"
                         id="pettyBalance">
-                        AED 5,000
+                        Rp5.000.000
                     </div>
                 </div>
 
@@ -1161,7 +1161,7 @@ textarea:focus {
                             <td style="text-align:right;"
                                 class="income"
                                 id="reportIncome">
-                                AED 0
+                                Rp0
                             </td>
                         </tr>
 
@@ -1171,7 +1171,7 @@ textarea:focus {
                             <td style="text-align:right;"
                                 class="expense"
                                 id="reportExpense">
-                                AED 0
+                                Rp0
                             </td>
                         </tr>
 
@@ -1181,7 +1181,7 @@ textarea:focus {
                             <td style="text-align:right;"
                                 class="profit"
                                 id="reportProfit">
-                                AED 0
+                                Rp0
                             </td>
                         </tr>
 
@@ -1193,7 +1193,7 @@ textarea:focus {
                 <div class="report-total">
                     Closing Cash:
                     <span id="reportCash">
-                        AED 0
+                        Rp0
                     </span>
                 </div>
 
@@ -1800,11 +1800,11 @@ function saveDatabase() {
 function money(value) {
 
     return new Intl.NumberFormat(
-        "en-US",
+        "id-ID",
         {
             style: "currency",
-            currency: "AED",
-            maximumFractionDigits: 2
+            currency: "IDR",
+            maximumFractionDigits: 0
         }
     ).format(value);
 
@@ -2399,7 +2399,7 @@ function renderPettyCash() {
     });
 
 
-    const opening = 5000;
+    const opening = 5000000;
 
     document.getElementById("pettyIn")
         .textContent = money(cashIn);
@@ -2806,7 +2806,7 @@ function renderChart() {
 
             label:
                 d.toLocaleString(
-                    "en-US",
+                    "id-ID",
                     {month:"short"}
                 )
 
